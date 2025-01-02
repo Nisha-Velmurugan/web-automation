@@ -1,41 +1,44 @@
 pipeline {
     agent any
     tools {
-        maven 'Maven 3'
+        maven 'sonarmaven'
+    }
+    environment {
+        SONAR_TOKEN = credentials('sonar-token')
+        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
+        PATH = "${JAVA_HOME}/bin:${env.PATH}"
     }
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Nisha-Velmurugan/web-automation.git'
+                checkout scm
             }
         }
         stage('Build') {
             steps {
-                script {
-                    sh 'mvn clean install'
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                script {
-                    sh 'mvn test'
-                }
+                sh 'mvn clean package'
             }
         }
         stage('SonarQube Analysis') {
             steps {
-                script {
-                    withSonarQubeEnv('SonarQube') {
-                        sh 'mvn sonar:sonar'
-                    }
+                withSonarQubeEnv('sonarqube') { 
+                    sh """
+                        sonar-scanner \
+                          -Dsonar.projectKey=web \
+                          -Dsonar.sources=. \
+                          -Dsonar.host.url=http://localhost:9000 \
+                          -Dsonar.token=${SONAR_TOKEN}
+                    """
                 }
             }
         }
     }
     post {
-        always {
-            echo 'Build, Test, or SonarQube analysis completed.'
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
         }
     }
 }
