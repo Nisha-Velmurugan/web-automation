@@ -1,10 +1,10 @@
 pipeline {
     agent any
     tools {
-        maven 'sonarmaven'
+        maven 'sonarmaven' // Ensure 'sonarmaven' is defined in Jenkins global tools
     }
     environment {
-        SONAR_TOKEN = credentials('sonar-token')
+        SONAR_TOKEN = credentials('sonar-token') // Ensure 'sonar-token' exists in Jenkins credentials
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
     }
@@ -21,14 +21,8 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube-scanner') { 
-                    sh """
-                        sonar-scanner \
-                          -Dsonar.projectKey=web \
-                          -Dsonar.sources=. \
-                          -Dsonar.host.url=http://localhost:9000 \
-                          -Dsonar.token=${SONAR_TOKEN}
-                    """
+                withSonarQubeEnv('sonarqube-scanner') { // Ensure 'sonarqube-scanner' is configured in Jenkins
+                    sh 'mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}'
                 }
             }
         }
