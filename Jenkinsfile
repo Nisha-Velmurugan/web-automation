@@ -1,10 +1,10 @@
 pipeline {
     agent any
     tools {
-        maven 'sonarmaven' // Ensure this matches the Maven tool name in Jenkins
+        maven 'sonarmaven'
     }
     environment {
-        SONAR_TOKEN = credentials('sonar-token') // SonarQube token ID in Jenkins credentials
+        SONAR_TOKEN = credentials('sonar-token')
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
     }
@@ -14,15 +14,22 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build') {
+        stage('Build and Test') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean verify'
             }
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube-scanner') { // Ensure this matches Jenkins SonarQube configuration name
-                    sh 'mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}'
+                withSonarQubeEnv('sonarqube-scanner') {
+                    sh """
+                        sonar-scanner \
+                          -Dsonar.projectKey=web \
+                          -Dsonar.sources=. \
+                          -Dsonar.host.url=http://localhost:9000 \
+                          -Dsonar.login=${SONAR_TOKEN} \
+                          -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                    """
                 }
             }
         }
