@@ -1,12 +1,12 @@
 pipeline {
     agent any
     tools {
-        maven 'Maven 3'  // Make sure this matches the name configured in Jenkins
+        maven 'Maven 3'
     }
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Nisha-Velmurugan/web-automation.git'
+                git branch: 'main', url: 'https://github.com/Nisha-Velmurugan/web-automation.git'
             }
         }
         stage('Build') {
