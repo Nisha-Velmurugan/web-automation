@@ -21,7 +21,7 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube') { 
+                withSonarQubeEnv('sonarqube-scanner') { 
                     sh """
                         sonar-scanner \
                           -Dsonar.projectKey=web \
