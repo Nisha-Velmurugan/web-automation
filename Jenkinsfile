@@ -14,16 +14,19 @@ pipeline {
                 checkout scm
             }
         }
+
         stage('Build and Test') {
             steps {
                 sh 'mvn clean verify'
             }
         }
+
         stage('Code Coverage') {
             steps {
                 sh 'mvn jacoco:report'
             }
         }
+
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube-scanner') {
@@ -35,6 +38,14 @@ pipeline {
                           -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
                     """
                 }
+            }
+        }
+
+        stage('Archive JaCoCo Reports') {
+            steps {
+                echo 'Archiving JaCoCo report...'
+                archiveArtifacts artifacts: 'target/site/jacoco/**/*.html', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'target/site/jacoco/jacoco.xml', allowEmptyArchive: true
             }
         }
     }
