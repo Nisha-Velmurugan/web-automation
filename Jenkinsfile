@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Archive JaCoCo Reports') {
             steps {
-                archiveArtifacts artifacts: 'target/site/jacoco/**/*.html', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'target/jacoco-ut/**/*.html', allowEmptyArchive: true
                 archiveArtifacts artifacts: 'target/jacoco-ut/jacoco.xml', allowEmptyArchive: true
             }
         }
