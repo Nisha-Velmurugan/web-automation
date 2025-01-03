@@ -84,9 +84,9 @@
                 </executions>
                 <configuration>
                        <outputDirectory>${project.build.directory}/jacoco-ut</outputDirectory>
-                       <formats>
-                                <format>xml</format> <!-- Ensures that the report is in XML format -->
-                       </formats>
+                       <reportFormats>
+                              <reportFormat>xml</reportFormat> <!-- Correct format setting -->
+                       </reportFormats>
                 </configuration>
             </plugin>
         </plugins>
