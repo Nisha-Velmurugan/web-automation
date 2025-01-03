@@ -33,7 +33,7 @@ pipeline {
                           -Dsonar.sources=src/main/java \
                           -Dsonar.tests=src/test/java \
                           -Dsonar.junit.reportPaths=target/surefire-reports \
-                          -Dsonar.jacoco.reportPaths=target/jacoco-ut/jacoco.xml
+                          -Dsonar.jacoco.reportPaths=target/jacoco-ut/jacoco.xml \
                           -Dsonar.host.url=http://localhost:9000 \
                           -Dsonar.login=${SONAR_TOKEN}
                     '''
