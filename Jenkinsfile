@@ -17,24 +17,24 @@ pipeline {
         stage('Clean target folder') {
             steps {
                 echo 'Cleaning target directory...'
-                bat '''
-                "%MAVEN_PATH%\\mvn" clean
+                sh '''
+                ${MAVEN_PATH} clean
                 '''
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing the project and generating JaCoCo report...'
-                bat '''
-                "%MAVEN_PATH%\\mvn" test jacoco:report
+                sh '''
+                ${MAVEN_PATH} test jacoco:report
                 '''
             }
         }
         stage('Package') {
             steps {
                 echo 'Packaging the compiled code...'
-                bat '''
-                "%MAVEN_PATH%\\mvn" package
+                sh '''
+                ${MAVEN_PATH} package
                 '''
             }
         }
@@ -42,17 +42,17 @@ pipeline {
             steps {
                 echo 'Running SonarQube analysis...'
                 sh '''
-                    mvn sonar:sonar \
-                      -Dsonar.projectKey=web \
-                      -Dsonar.host.url=http://localhost:9000 \
-                      -Dsonar.login=${SONAR_TOKEN}
+                ${MAVEN_PATH} sonar:sonar \
+                  -Dsonar.projectKey=web \
+                  -Dsonar.host.url=http://localhost:9000 \
+                  -Dsonar.login=${SONAR_TOKEN}
                 '''
             }
         }
         stage('Archive JaCoCo Reports') {
             steps {
                 echo 'Archiving JaCoCo report...'
-                archiveArtifacts artifacts: 'target/jacoco-ut/jacoco.html', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'target/site/jacoco/jacoco.html', allowEmptyArchive: true
             }
         }
     }
