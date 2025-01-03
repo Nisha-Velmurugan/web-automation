@@ -2,7 +2,6 @@ pipeline {
     agent any
     tools {
         maven 'sonarmaven'
-        jdk 'JAVA_HOME'
     }
     environment {
         MAVEN_PATH = '/usr/bin/mvn'
