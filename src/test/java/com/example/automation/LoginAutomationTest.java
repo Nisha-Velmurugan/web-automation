@@ -5,14 +5,22 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LoginAutomationTest {
     @Test
     public void testLogin() {
-        // Set up the WebDriver
+        // Set the system property for ChromeDriver
         System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
-        WebDriver driver = new ChromeDriver();
+
+        // Set up Chrome options and specify the path to the Chrome binary
+        ChromeOptions options = new ChromeOptions();
+        options.setBinary("/opt/google/chrome/chrome");  // Set this to your actual Chrome binary path
+
+        // Initialize WebDriver with ChromeOptions
+        WebDriver driver = new ChromeDriver(options);
+
         try {
             // Navigate to Form Authentication page
             driver.get("https://the-internet.herokuapp.com/login");
@@ -38,4 +46,3 @@ public class LoginAutomationTest {
         }
     }
 }
-
