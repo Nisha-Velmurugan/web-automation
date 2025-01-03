@@ -6,39 +6,40 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginAutomationTest {
     @Test
     public void testLogin() {
-        // Set the system property for ChromeDriver
-        System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
+        // Use WebDriverManager to handle ChromeDriver setup
+        WebDriverManager.chromedriver().setup();
 
-        // Set up Chrome options and specify the path to the Chrome binary
+        // Set up Chrome options
         ChromeOptions options = new ChromeOptions();
-        options.setBinary("/opt/google/chrome/chrome");  // Set this to your actual Chrome binary path
+        options.addArguments("--headless"); // Run in headless mode for CI environments
+        options.addArguments("--disable-gpu", "--window-size=1920,1200", "--ignore-certificate-errors");
 
-        // Initialize WebDriver with ChromeOptions
         WebDriver driver = new ChromeDriver(options);
 
         try {
-            // Navigate to Form Authentication page
+            // Navigate to the login page
             driver.get("https://the-internet.herokuapp.com/login");
 
-            // Locate the username and password fields
+            // Locate the username, password fields, and login button
             WebElement usernameField = driver.findElement(By.id("username"));
             WebElement passwordField = driver.findElement(By.id("password"));
             WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
 
-            // Perform login
-            usernameField.sendKeys("tomsmith");  // Valid username
-            passwordField.sendKeys("SuperSecretPassword!");  // Valid password
+            // Enter valid credentials and click login
+            usernameField.sendKeys("tomsmith");
+            passwordField.sendKeys("SuperSecretPassword!");
             loginButton.click();
 
-            // Validate successful login (you can check the page title or a specific element)
-            String expectedTitle = "The Internet";
-            String actualTitle = driver.getTitle();
-            assertEquals(expectedTitle, actualTitle);
+            // Verify successful login by checking the presence of a success message
+            WebElement successMessage = driver.findElement(By.cssSelector(".flash.success"));
+            assertTrue(successMessage.isDisplayed(), "Login failed: Success message not displayed.");
 
         } finally {
             // Close the browser
