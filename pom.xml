@@ -13,8 +13,10 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-         <sonar.login>sqp_53ac7ee74b38af371b9bf99fc9600e108f587510</sonar.login>
+        <sonar.login>sqp_53ac7ee74b38af371b9bf99fc9600e108f587510</sonar.login>
         <sonar.host.url>http://localhost:9000</sonar.host.url> <!-- Change this to your SonarQube server URL -->
+        <!-- Define JaCoCo report path for SonarQube -->
+        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencies>
@@ -70,6 +72,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <destFile>${project.build.directory}/jacoco.exec</destFile> <!-- Specify the location for the raw JaCoCo report -->
+                </configuration>
             </plugin>
 
             <!-- SonarQube Plugin for Analysis -->
