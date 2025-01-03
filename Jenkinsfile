@@ -29,7 +29,7 @@ pipeline {
                 withSonarQubeEnv('sonarqube-scanner') {
                     sh '''
                         mvn sonar:sonar \
-                          -Dsonar.projectKey=mavencode1 \
+                          -Dsonar.projectKey=web \
                           -Dsonar.sources=src/main/java \
                           -Dsonar.tests=src/test/java \
                           -Dsonar.junit.reportPaths=target/surefire-reports \
