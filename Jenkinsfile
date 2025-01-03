@@ -2,11 +2,12 @@ pipeline {
     agent any
     tools {
         maven 'sonarmaven'
+        jdk 'JAVA_HOME'
     }
     environment {
-        SONAR_TOKEN = credentials('sonar-token')
+        MAVEN_PATH = '/usr/bin/mvn'
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
-        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+        SONAR_TOKEN = credentials('sonar-token')
     }
     stages {
         stage('Checkout') {
@@ -14,36 +15,45 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build and Test') {
+        stage('Clean target folder') {
             steps {
-                sh 'mvn clean verify'
+                echo 'Cleaning target directory...'
+                bat '''
+                "%MAVEN_PATH%\\mvn" clean
+                '''
             }
         }
-        stage('Code Coverage') {
+        stage('Test') {
             steps {
-                sh 'mvn jacoco:report'
+                echo 'Testing the project and generating JaCoCo report...'
+                bat '''
+                "%MAVEN_PATH%\\mvn" test jacoco:report
+                '''
+            }
+        }
+        stage('Package') {
+            steps {
+                echo 'Packaging the compiled code...'
+                bat '''
+                "%MAVEN_PATH%\\mvn" package
+                '''
             }
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube-scanner') {
-                    sh '''
+                echo 'Running SonarQube analysis...'
+                sh '''
                         mvn sonar:sonar \
                           -Dsonar.projectKey=web \
-                          -Dsonar.sources=src/main/java \
-                          -Dsonar.tests=src/test/java \
-                          -Dsonar.junit.reportPaths=target/surefire-reports \
-                          -Dsonar.jacoco.reportPaths=target/jacoco-ut/jacoco.xml \
+                          -Dsonar.projectKey=login-automation \
                           -Dsonar.host.url=http://localhost:9000 \
                           -Dsonar.login=${SONAR_TOKEN}
-                    '''
-                }
             }
         }
         stage('Archive JaCoCo Reports') {
             steps {
-                archiveArtifacts artifacts: 'target/jacoco-ut/**/*.html', allowEmptyArchive: true
-                archiveArtifacts artifacts: 'target/jacoco-ut/jacoco.xml', allowEmptyArchive: true
+                echo 'Archiving JaCoCo report...'
+                archiveArtifacts artifacts: 'target/jacoco-ut/jacoco.html', allowEmptyArchive: true
             }
         }
     }
@@ -52,7 +62,7 @@ pipeline {
             echo 'Pipeline completed successfully.'
         }
         failure {
-            echo 'Pipeline failed.'
+            echo 'Pipeline failed. Check logs for details.'
         }
     }
 }
