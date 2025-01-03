@@ -30,6 +30,10 @@ pipeline {
                     sh '''
                         mvn sonar:sonar \
                           -Dsonar.projectKey=mavencode1 \
+                          -Dsonar.sources=src/main/java \
+                          -Dsonar.tests=src/test/java \
+                          -Dsonar.junit.reportPaths=target/surefire-reports \
+                          -Dsonar.jacoco.reportPaths=target/site/jacoco/jacoco.xml \
                           -Dsonar.host.url=http://localhost:9000 \
                           -Dsonar.login=${SONAR_TOKEN}
                     '''
