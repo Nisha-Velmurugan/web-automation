@@ -43,11 +43,11 @@ pipeline {
             steps {
                 echo 'Running SonarQube analysis...'
                 sh '''
-                        mvn sonar:sonar \
-                          -Dsonar.projectKey=web \
-                          -Dsonar.projectKey=login-automation \
-                          -Dsonar.host.url=http://localhost:9000 \
-                          -Dsonar.login=${SONAR_TOKEN}
+                    mvn sonar:sonar \
+                      -Dsonar.projectKey=web \
+                      -Dsonar.host.url=http://localhost:9000 \
+                      -Dsonar.login=${SONAR_TOKEN}
+                '''
             }
         }
         stage('Archive JaCoCo Reports') {
