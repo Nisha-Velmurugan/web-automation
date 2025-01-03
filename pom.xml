@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -6,10 +5,8 @@
 
     <groupId>com.example.automation</groupId>
     <artifactId>login-automation</artifactId>
-    <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>login-automation</name>
-    <url>http://maven.apache.org</url>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -19,9 +16,6 @@
         <sonar.sources>src/main/java</sonar.sources>
         <sonar.tests>src/test/java</sonar.tests>
         <sonar.java.binaries>target/classes</sonar.java.binaries>
-        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
-        <sonar.duplications.hashtable>200000</sonar.duplications.hashtable>
-        <sonar.duplications>always</sonar.duplications>
         <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/jacoco-ut/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
@@ -31,13 +25,11 @@
             <artifactId>selenium-java</artifactId>
             <version>4.18.1</version>
         </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.10.2</version>
         </dependency>
-
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
@@ -47,26 +39,11 @@
 
     <build>
         <plugins>
-            <!-- Surefire Plugin for running Tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M9</version>
-                <configuration>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
-                </configuration>
             </plugin>
-
-            <!-- SonarQube Plugin -->
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.9.0.2155</version>
-            </plugin>
-
-            <!-- JaCoCo Plugin for Code Coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -74,26 +51,23 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>prepare-agent</goal> <!-- Enable agent to collect coverage -->
+                            <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
                         <id>report</id>
                         <phase>verify</phase>
                         <goals>
-                            <goal>report</goal> <!-- Generate coverage report -->
+                            <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <outputDirectory>${project.build.directory}/jacoco-ut</outputDirectory>
-                    <reportFormats>
-                        <reportFormat>xml</reportFormat> <!-- Correct format setting -->
-                    </reportFormats>
-                </configuration>
             </plugin>
-
-            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.0.2155</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
