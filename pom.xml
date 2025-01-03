@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -35,15 +36,23 @@
             <artifactId>webdrivermanager</artifactId>
             <version>5.5.3</version>
         </dependency>
+
+        <!-- Ensure compatibility with doxia-siterenderer -->
+        <dependency>
+            <groupId>org.apache.maven.doxia</groupId>
+            <artifactId>doxia-siterenderer</artifactId>
+            <version>1.9</version> <!-- Compatible version -->
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-             <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-site-plugin</artifactId>
-                  <version>3.9.1</version>
-             </plugin>
+            <!-- Updated maven-site-plugin version -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.9.1</version>
+            </plugin>
 
             <!-- Surefire Plugin for Running Tests -->
             <plugin>
