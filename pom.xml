@@ -14,7 +14,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <sonar.projectKey>web</sonar.projectKey> <!-- Update this with the correct project key -->
-        <sonar.login>sqp_53ac7ee74b38af371b9bf99fc9600e108f587510</sonar.login>
+        <sonar.token>squ_8f798aa0f4a6078d0f41eb4ff253c6efaf84c99b</sonar.token> <!-- Corrected Sonar token -->
         <sonar.host.url>http://localhost:9000</sonar.host.url> <!-- Change this to your SonarQube server URL -->
         <!-- Define JaCoCo report path for SonarQube -->
         <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
